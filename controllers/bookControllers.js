@@ -34,7 +34,25 @@ const updateBook = async (req, res) => {
 
 // DELETE /books/:bookId
 const deleteBook = async (req, res) => {
-  res.send("deleteBook");
+
+  const {bookId} = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(bookId)) {
+    return res.status(400).json({message: "Invalid book ID"});
+  }
+
+  try {
+    const deletedBook = await Book.findOneAndDelete({_id: bookId});
+    if (deletedBook) {
+      res.status(204).send();
+
+    }else {
+      res.status(404).json({message: "Book not found"});
+    }
+  } catch (error) {
+    res.status(500).json({message: "Failed to delete book"});
+  }
+
 };
 
 module.exports = {
