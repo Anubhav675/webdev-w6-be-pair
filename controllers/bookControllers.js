@@ -8,7 +8,13 @@ const getAllBooks = async (req, res) => {
 
 // POST /books
 const createBook = async (req, res) => {
-  res.send("createBook");
+  try {
+    const newBook = await Book.create({ ...req.body});
+    res.status(201).json(newBook);
+  }catch (error) {
+    res.status(400).json({message: "Failed to create book", error: error.message});
+  }
+  // res.send("createBook");
 };
 
 // GET /books/:bookId
