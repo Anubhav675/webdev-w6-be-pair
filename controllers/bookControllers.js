@@ -3,7 +3,12 @@ const mongoose = require("mongoose");
 
 // GET /books
 const getAllBooks = async (req, res) => {
-  res.send("getAllBooks");
+  try{
+    const books = await Book.find({}).sort({ createdAt: -1});
+    res.status(200).json(books);
+  }catch(err){
+    res.status(500).json({message: "Failed to retrieve books", error: err.message});
+  }
 };
 
 // POST /books
